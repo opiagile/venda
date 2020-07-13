@@ -13,6 +13,7 @@ import com.opiagile.venda.domain.Cidade;
 import com.opiagile.venda.domain.Cliente;
 import com.opiagile.venda.domain.Endereco;
 import com.opiagile.venda.domain.Estado;
+import com.opiagile.venda.domain.ItemPedido;
 import com.opiagile.venda.domain.Pagamento;
 import com.opiagile.venda.domain.PagamentoComBoleto;
 import com.opiagile.venda.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.opiagile.venda.repositories.CidadeRepository;
 import com.opiagile.venda.repositories.ClienteRepository;
 import com.opiagile.venda.repositories.EnderecoRepository;
 import com.opiagile.venda.repositories.EstadoRepository;
+import com.opiagile.venda.repositories.ItemPedidoRepository;
 import com.opiagile.venda.repositories.PagamentoRepository;
 import com.opiagile.venda.repositories.PedidoRepository;
 import com.opiagile.venda.repositories.ProdutoRepository;
@@ -55,6 +57,9 @@ public class VendaApplication implements CommandLineRunner {
 
 	@Autowired
 	PagamentoRepository pagamentoRepository;
+
+	@Autowired
+	ItemPedidoRepository itemPedidoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(VendaApplication.class, args);
@@ -118,6 +123,20 @@ public class VendaApplication implements CommandLineRunner {
 		
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
+		
 		
 	}
 
